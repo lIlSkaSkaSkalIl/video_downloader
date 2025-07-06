@@ -29,7 +29,7 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
             text=f"""📦 Persiapan Upload Batch
 
 ╭─────────── Informasi ───────────╮
-├ 📁 Jumlah Video : {total} file
+├ 📁 Jumlah File  : {total} file ditemukan
 ├ ⚠️ Perhatian    : Kirim satu pesan 
 │                  ke channel lebih dulu,
 │                  agar bot mendapatkan izin.
@@ -65,7 +65,7 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
 ├ 📁 Total File   : {total} video
 ├ 📦 Total Ukuran : {total_size_mb:.2f} MB
 ├ ⏱️ Total Waktu  : {minutes} menit {seconds} detik
-╰──────────────────────────────╯
+╰───────────────────────────────╯
 
 🎉 Semua video berhasil diupload!
 """,
