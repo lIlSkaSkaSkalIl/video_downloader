@@ -2,6 +2,8 @@
 
 Automasi lengkap untuk mengunduh video dari berbagai sumber (Google Drive, M3U8, Direct Link, dan Twitter) dan mengunggahnya ke Telegram secara otomatis. Dirancang untuk berjalan di Google Colab dengan antarmuka interaktif.
 
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lIlSkaSkaSkalIl/video_downloader/blob/main/video_downloader.ipynb)
+
 ---
 
 ## ✨ Fitur Utama
