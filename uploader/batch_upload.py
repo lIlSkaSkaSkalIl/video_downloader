@@ -14,6 +14,7 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
         meta_files = sorted(glob.glob(os.path.join(meta_dir, "*_meta.json")))
         total = len(meta_files)
 
+        # ⛔ Tidak ada file
         if total == 0:
             await app.send_message(
                 chat_id=CHAT_ID,
@@ -22,6 +23,20 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
             )
             return
 
+        # ✅ Kirim status awal
+        await app.send_message(
+            chat_id=CHAT_ID,
+            text=f"""📦 Ditemukan *{total}* file video untuk diupload.
+
+⚠️ *Pastikan Anda telah mengirim satu pesan ke channel* agar bot mendapatkan izin untuk mengupload ke sana.
+
+⏳ Menunggu 20 detik sebelum mulai upload...""",
+            parse_mode=ParseMode.MARKDOWN
+        )
+
+        await asyncio.sleep(20)
+
+        # 🚀 Mulai upload
         start_time = time.time()
         total_size_bytes = sum(
             os.path.getsize(json.load(open(f))["video_path"])
@@ -32,6 +47,7 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
             await kirim_video(app, meta_path, idx, total, CHAT_ID, CHANNEL_ID, log_txt, log_json)
             await asyncio.sleep(2)
 
+        # ✅ Selesai
         elapsed = time.time() - start_time
         minutes, seconds = divmod(int(elapsed), 60)
         total_size_mb = total_size_bytes / (1024 * 1024)
@@ -50,7 +66,6 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
         )
 
         tulis_log_txt(log_txt, f"[📦] Batch selesai: {total} file, {total_size_mb:.2f} MB, {minutes}m {seconds}s")
-
         tulis_log_json(log_json, {
             "status": "batch_done",
             "total_files": total,
