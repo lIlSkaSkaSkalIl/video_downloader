@@ -28,12 +28,13 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
             chat_id=CHAT_ID,
             text=f"""📦 Persiapan Upload Batch
 
-╭────────────── Informasi ──────────────╮
-├ 📁 Jumlah Video  : {total} file
-├ ⚠️ Perhatian     : Kirim satu pesan ke channel lebih dulu,
-│                   agar bot mendapatkan izin upload.
-├ ⏳ Status        : Menunggu 20 detik...
-╰───────────────────────────────────╯
+╭────────── Informasi ──────────╮
+├ 📁 Jumlah Video: {total} file
+├ ⚠️ Perhatian   : Kirim satu pesan 
+│                  ke channel lebih dulu,
+│                  agar bot mendapatkan izin.
+├ ⏳ Status      : Menunggu 20 detik...
+╰───────────────────────────╯
 """,
             parse_mode=ParseMode.MARKDOWN
         )
@@ -60,11 +61,11 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
             chat_id=CHAT_ID,
             text=f"""✅ *Batch Upload Selesai!*
 
-╭──────────── Ringkasan Upload ───────────╮
-├ 📁 Total File   : *{total}* video
-├ 📦 Total Ukuran : *{total_size_mb:.2f}* MB
-├ ⏱️ Total Waktu  : *{minutes}* menit *{seconds}* detik
-╰──────────────────────────────────╯
+╭────────── Ringkasan Upload ─────────╮
+├ 📁 Total File   : {total} video
+├ 📦 Total Ukuran : {total_size_mb:.2f} MB
+├ ⏱️ Total Waktu  : {minutes} menit {seconds} detik
+╰──────────────────────────────╯
 
 🎉 Semua video berhasil diupload!
 """,
