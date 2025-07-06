@@ -23,20 +23,24 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
             )
             return
 
-        # ✅ Kirim status awal
+        # 📢 Status awal dan peringatan izin channel
         await app.send_message(
             chat_id=CHAT_ID,
-            text=f"""📦 Ditemukan *{total}* file video untuk diupload.
+            text=f"""📦 Persiapan Upload Batch
 
-⚠️ *Pastikan Anda telah mengirim satu pesan ke channel* agar bot mendapatkan izin untuk mengupload ke sana.
-
-⏳ Menunggu 20 detik sebelum mulai upload...""",
+╭────────────── Informasi ──────────────╮
+├ 📁 Jumlah Video  : {total} file
+├ ⚠️ Perhatian     : Kirim satu pesan ke channel lebih dulu,
+│                   agar bot mendapatkan izin upload.
+├ ⏳ Status        : Menunggu 20 detik...
+╰───────────────────────────────────╯
+""",
             parse_mode=ParseMode.MARKDOWN
         )
 
         await asyncio.sleep(20)
 
-        # 🚀 Mulai upload
+        # 🚀 Mulai proses upload
         start_time = time.time()
         total_size_bytes = sum(
             os.path.getsize(json.load(open(f))["video_path"])
@@ -47,18 +51,20 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
             await kirim_video(app, meta_path, idx, total, CHAT_ID, CHANNEL_ID, log_txt, log_json)
             await asyncio.sleep(2)
 
-        # ✅ Selesai
+        # ✅ Upload selesai
         elapsed = time.time() - start_time
         minutes, seconds = divmod(int(elapsed), 60)
         total_size_mb = total_size_bytes / (1024 * 1024)
 
         await app.send_message(
             chat_id=CHAT_ID,
-            text=f"""✅ Batch Upload Selesai!!
+            text=f"""✅ *Batch Upload Selesai!*
 
-📁 Total File   : {total} video
-📦 Total Ukuran : {total_size_mb:.2f} MB
-⏱️ Total Waktu  : {minutes} menit {seconds} detik
+╭──────────── Ringkasan Upload ───────────╮
+├ 📁 Total File   : *{total}* video
+├ 📦 Total Ukuran : *{total_size_mb:.2f}* MB
+├ ⏱️ Total Waktu  : *{minutes}* menit *{seconds}* detik
+╰──────────────────────────────────╯
 
 🎉 Semua video berhasil diupload!
 """,
