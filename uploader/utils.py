@@ -35,7 +35,7 @@ def status_awal(filename, filesize_mb, duration, current_index, total_count):
 ├ 📦 {LABELS['ukuran']}{SEP} {filesize_mb:.2f} MB
 ├ 🕒 {LABELS['durasi']}{SEP} {duration} detik
 ├ ⏳ {LABELS['status']}{SEP} Mengunggah...
-╰──────────────────────────────╯
+╰────────────────────────────╯
 """
 
 # ✅ Status sukses upload
