@@ -3,8 +3,8 @@ import json
 import time
 import glob
 import asyncio
-from pyrogram import Client
-from pyrogram.enums import ParseMode
+from pyrofork import Client
+from pyrofork.enums import ParseMode
 
 from .upload import kirim_video
 from .utils import tulis_log_txt, tulis_log_json
@@ -35,10 +35,10 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
 ├ ⚠️ {LABELS['peringatan']}{SEP} Kirim satu pesan ke channel
 │     terlebih dahulu,agar bot mendapatkan izin.
 ├ ⏳ {LABELS['status']}{SEP} Menunggu 20 detik...
-╰─────────────────────────────╯
+╰──────────────────────────────╯
 """,
-            parse_mode=ParseMode.MARKDOWN
-        )
+                parse_mode=ParseMode.MARKDOWN
+            )
 
         await asyncio.sleep(20)
 
