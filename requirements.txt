@@ -1,3 +1,3 @@
-git+https://github.com/Maheshkumar-nov/Pyrofork.git
+pyrofork
 tgcrypto
 tqdm
