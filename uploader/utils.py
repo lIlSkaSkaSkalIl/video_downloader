@@ -5,7 +5,7 @@ from .labels import LABELS, SEP
 
 # 🔠 Escape karakter Markdown agar tidak error saat parsing
 def escape_md(text):
-    return re.sub(r'([*\[\]~`>#+\-=|{}!])', r'\\\1', text)
+    return re.sub(r'([*\[\]~`>#+\=|{}!])', r'\\\1', text)
 
 # 📓 Menulis log ringkas ke file .txt
 def tulis_log_txt(log_txt, teks):
