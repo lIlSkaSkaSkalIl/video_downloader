@@ -30,10 +30,10 @@ def status_awal(filename, filesize_mb, duration, current_index, total_count):
     return f"""🚀 Upload Video ({current_index}/{total_count})
 
 ╭────────── Detail Upload ──────────╮
-📁 Nama     : {filename}
-📦 Ukuran   : {filesize_mb:.2f} MB
-🕒 Durasi   : {duration} detik
-⏳ Status   : Mengunggah...
+├📁 Nama     : {filename}
+├📦 Ukuran   : {filesize_mb:.2f} MB
+├🕒 Durasi   : {duration} detik
+├⏳ Status   : Mengunggah...
 ╰─────────────────────────────╯
 """
 
@@ -42,16 +42,16 @@ def status_sukses(filename, current_index, total_count, waktu_upload, meta):
     return f"""✅ Upload Berhasil! ({current_index}/{total_count})
 
 ╭────────── Detail Upload ──────────╮
-🎬 File     : {filename}
-📐 Resolusi: {meta.get("resolution", "?")}
-🎥 Video    : {meta.get("video_codec", "?")} ({meta.get("video_bitrate", "?")} bps)
-🎧 Audio    : {meta.get("audio_codec", "?")} ({meta.get("audio_bitrate", "?")} bps)
-📊 Bitrate  : {meta.get("bit_rate", "?")} bps
-📦 Ukuran   : {meta.get("size_mb", 0):.2f} MB
-🕒 Durasi   : {meta.get("duration", 0)} detik
-📤 Status   : Sukses
-🧹 Cleanup  : File dihapus otomatis
-⏱️ Waktu    : {waktu_upload:.2f} detik
+├🎬 File     : {filename}
+├📐 Resolusi: {meta.get("resolution", "?")}
+├🎥 Video    : {meta.get("video_codec", "?")} ({meta.get("video_bitrate", "?")} bps)
+├🎧 Audio    : {meta.get("audio_codec", "?")} ({meta.get("audio_bitrate", "?")} bps)
+├📊 Bitrate  : {meta.get("bit_rate", "?")} bps
+├📦 Ukuran   : {meta.get("size_mb", 0):.2f} MB
+├🕒 Durasi   : {meta.get("duration", 0)} detik
+├📤 Status   : Sukses
+├🧹 Cleanup  : File dihapus otomatis
+├⏱️ Waktu    : {waktu_upload:.2f} detik
 ╰─────────────────────────────╯
 """
 
@@ -60,7 +60,7 @@ def status_error(filename, error_text, current_index, total_count):
     return f"""❌ Upload Gagal! ({current_index}/{total_count})
 
 ╭────────── Detail Upload ──────────╮
-📁 File     : {filename}
-⚠️ Error    : {error_text}
+├📁 File     : {filename}
+├⚠️ Error    : {error_text}
 ╰─────────────────────────────╯
 """
