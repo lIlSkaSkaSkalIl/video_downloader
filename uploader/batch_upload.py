@@ -3,7 +3,6 @@ import json
 import time
 import glob
 import asyncio
-import pyrofork
 from pyrofork import Client
 from pyrofork.enums import ParseMode
 
