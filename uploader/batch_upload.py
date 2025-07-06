@@ -4,7 +4,7 @@ import time
 import glob
 import asyncio
 from pyrogram import Client
-from pyrogram.enums import ParseMode  # ganti dari pyrofork ke pyrogram
+from pyrogram.enums import ParseMode
 
 from .upload import kirim_video
 from .utils import tulis_log_txt, tulis_log_json
@@ -12,11 +12,17 @@ from .labels import LABELS, SEP
 
 # 🔁 Fungsi utama untuk batch upload semua video
 async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID, API_HASH, BOT_TOKEN):
-    async with Client("upload_bot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN) as app:
+    async with Client(
+        "upload_bot",
+        api_id=API_ID,
+        api_hash=API_HASH,
+        bot_token=BOT_TOKEN,
+        workers=32,           # ✅ lebih banyak worker untuk upload paralel chunk
+        in_memory=True        # ✅ hindari read/write disk session temp
+    ) as app:
         meta_files = sorted(glob.glob(os.path.join(meta_dir, "*_meta.json")))
         total = len(meta_files)
 
-        # ⛔ Tidak ada file
         if total == 0:
             await app.send_message(
                 chat_id=CHAT_ID,
@@ -25,7 +31,6 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
             )
             return
 
-        # 📢 Status awal dan peringatan izin channel
         await app.send_message(
             chat_id=CHAT_ID,
             text=f"""📦 *{LABELS['persiapan']}*
