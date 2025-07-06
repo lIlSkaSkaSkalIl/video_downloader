@@ -63,11 +63,11 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
             chat_id=CHAT_ID,
             text=f"""✅ *{LABELS['batch_selesai']}*
 
-╭────────── {LABELS['detail_upload']} ──────────╮
+╭───────── {LABELS['detail_upload']} ─────────╮
 ├ 📁 {LABELS['total_file']}{SEP} {total} video
 ├ 📦 {LABELS['total_ukuran']}{SEP} {total_size_mb:.2f} MB
 ├ ⏱️ {LABELS['total_waktu']}{SEP} {minutes} menit {seconds} detik
-╰─────────────────────────────╯
+╰───────────────────────────╯
 
 🎉 {LABELS['sukses_upload']}
 """,
