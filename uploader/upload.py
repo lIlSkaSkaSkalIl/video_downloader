@@ -3,7 +3,7 @@ import json
 import time
 import traceback
 from tqdm import tqdm
-from pyrogram.enums import ParseMode
+from pyrofork.enums import ParseMode
 from .utils import (
     escape_md,
     tulis_log_txt,
