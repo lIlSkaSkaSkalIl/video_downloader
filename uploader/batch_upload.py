@@ -3,8 +3,8 @@ import json
 import time
 import glob
 import asyncio
-from pyrofork import Client
-from pyrofork.enums import ParseMode
+from pyrogram import Client
+from pyrogram.enums import ParseMode  # ganti dari pyrofork ke pyrogram
 
 from .upload import kirim_video
 from .utils import tulis_log_txt, tulis_log_json
