@@ -5,8 +5,10 @@ import glob
 import asyncio
 from pyrogram import Client
 from pyrogram.enums import ParseMode
+
 from .upload import kirim_video
 from .utils import tulis_log_txt, tulis_log_json
+from .labels import LABELS, SEP
 
 # 🔁 Fungsi utama untuk batch upload semua video
 async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID, API_HASH, BOT_TOKEN):
@@ -18,7 +20,7 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
         if total == 0:
             await app.send_message(
                 chat_id=CHAT_ID,
-                text="⚠️ Tidak ada file video yang ditemukan untuk diupload.",
+                text=f"⚠️ {LABELS['tidak_ada_file']}",
                 parse_mode=ParseMode.MARKDOWN
             )
             return
@@ -26,14 +28,14 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
         # 📢 Status awal dan peringatan izin channel
         await app.send_message(
             chat_id=CHAT_ID,
-            text=f"""📦 Persiapan Upload Batch
+            text=f"""📦 *{LABELS['persiapan']}*
 
-╭─────────── Informasi ───────────╮
-├ 📁 Jumlah File  : {total} file ditemukan
-├ ⚠️ Perhatian    : Kirim satu pesan 
-│                  ke channel lebih dulu,
-│                  agar bot mendapatkan izin.
-├ ⏳ Status       : Menunggu 20 detik...
+╭─────────── {LABELS['informasi']} ───────────╮
+├ 📁 {LABELS['total_file']}{SEP} {total} video ditemukan
+├ ⚠️ {LABELS['peringatan']}{SEP} Kirim satu pesan
+│   ke channel lebih dulu,
+│   agar bot mendapatkan izin.
+├ ⏳ {LABELS['status']}{SEP} Menunggu 20 detik...
 ╰─────────────────────────────╯
 """,
             parse_mode=ParseMode.MARKDOWN
@@ -59,15 +61,15 @@ async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID,
 
         await app.send_message(
             chat_id=CHAT_ID,
-            text=f"""✅ *Batch Upload Selesai!*
+            text=f"""✅ *{LABELS['batch_selesai']}*
 
-╭────────── Detail Upload ──────────╮
-├ 📁 Total File   : {total} video
-├ 📦 Total Ukuran : {total_size_mb:.2f} MB
-├ ⏱️ Total Waktu  : {minutes} menit {seconds} detik
+╭────────── {LABELS['detail_upload']} ──────────╮
+├ 📁 {LABELS['total_file']}{SEP} {total} video
+├ 📦 {LABELS['total_ukuran']}{SEP} {total_size_mb:.2f} MB
+├ ⏱️ {LABELS['total_waktu']}{SEP} {minutes} menit {seconds} detik
 ╰─────────────────────────────╯
 
-🎉 Semua video berhasil diupload!
+🎉 {LABELS['sukses_upload']}
 """,
             parse_mode=ParseMode.MARKDOWN
         )
