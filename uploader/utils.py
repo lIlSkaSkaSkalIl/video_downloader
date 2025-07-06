@@ -1,7 +1,7 @@
 import os
 import json
 import re
-from uploader.labels import LABELS, SEP
+from .labels import LABELS, SEP
 
 # 🔠 Escape karakter Markdown agar tidak error saat parsing
 def escape_md(text):
@@ -30,7 +30,7 @@ def tulis_log_json(log_json, entry):
 def status_awal(filename, filesize_mb, duration, current_index, total_count):
     return f"""🚀 Upload Video ({current_index}/{total_count})
 
-╭────────── Detail Upload ──────────╮
+╭────────── {LABELS['detail_upload']} ──────────╮
 ├ 📁 {LABELS['nama']}{SEP} {filename}
 ├ 📦 {LABELS['ukuran']}{SEP} {filesize_mb:.2f} MB
 ├ 🕒 {LABELS['durasi']}{SEP} {duration} detik
@@ -42,7 +42,7 @@ def status_awal(filename, filesize_mb, duration, current_index, total_count):
 def status_sukses(filename, current_index, total_count, waktu_upload, meta):
     return f"""✅ Upload Berhasil! ({current_index}/{total_count})
 
-╭────────── Detail Upload ──────────╮
+╭────────── {LABELS['detail_upload']} ──────────╮
 ├ 🎬 {LABELS['file']}{SEP} {filename}
 ├ 📐 {LABELS['resolusi']}{SEP} {meta.get("resolution", "?")}
 ├ 🎥 {LABELS['video']}{SEP} {meta.get("video_codec", "?")} ({meta.get("video_bitrate", "?")} bps)
@@ -60,7 +60,7 @@ def status_sukses(filename, current_index, total_count, waktu_upload, meta):
 def status_error(filename, error_text, current_index, total_count):
     return f"""❌ Upload Gagal! ({current_index}/{total_count})
 
-╭────────── Detail Upload ──────────╮
+╭────────── {LABELS['detail_upload']} ──────────╮
 ├ 📁 {LABELS['file']}{SEP} {filename}
 ├ ⚠️ {LABELS['error']}{SEP} {error_text}
 ╰─────────────────────────────╯
