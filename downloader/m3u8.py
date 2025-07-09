@@ -1,25 +1,43 @@
 # downloader/m3u8.py
 
 import subprocess
-import os
-from core.setup_directories import prepare_directories
+import shutil
 
-dirs = prepare_directories()
+def download_from_m3u8(url: str, output_path: str):
+    """
+    Mengunduh video dari link M3U8 menggunakan downloadm3u8 CLI tool.
 
-def download_from_m3u8(url: str, filename: str = "video_m3u8.mp4") -> str:
-    downloader_path = os.path.expanduser("~/.local/bin/downloadm3u8")
-    if not os.path.exists(downloader_path):
-        raise FileNotFoundError("❌ 'downloadm3u8' tidak ditemukan di ~/.local/bin/. Restart runtime setelah install.")
+    Parameters:
+        url (str): URL video M3U8.
+        output_path (str): Path file output untuk menyimpan hasil unduhan.
 
-    output_path = os.path.join(dirs["video"], filename)
+    Raises:
+        FileNotFoundError: Jika `downloadm3u8` tidak ditemukan di PATH sistem.
+    """
+    # Cari path dari downloadm3u8 secara otomatis
+    downloader_path = shutil.which("downloadm3u8")
+    if not downloader_path:
+        raise FileNotFoundError(
+            "❌ 'downloadm3u8' tidak ditemukan di PATH. "
+            "Pastikan sudah menjalankan: `!pip install --user m3u8downloader` "
+            "dan menambahkan ~/.local/bin ke PATH."
+        )
 
+    # Jalankan perintah unduhan
     cmd = [
         downloader_path,
         "-o", output_path,
         url
     ]
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+
+    process = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True
+    )
+
     for line in process.stdout:
         print(f"\r{line.strip()[:150]}", end="", flush=True)
+
     process.wait()
-    return output_path
