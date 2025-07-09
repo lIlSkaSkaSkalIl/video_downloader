@@ -1,14 +1,10 @@
-# downloader/router.py
-
 import time
 import os
-
 from downloader.google_drive import download_from_google_drive
-from downloader.m3u8 import download_from_m3u8
-from downloader.ytdlp import download_from_direct_link
+from downloader.ytdlp import download_with_ytdlp
 
 def is_m3u8(url: str) -> bool:
-    return url.endswith(".m3u8") or ".m3u8?" in url
+    return url.endswith(".m3u8") or ".m3u8?" in url or ".ts" in url
 
 def is_drive(url: str) -> bool:
     return "drive.google.com" in url
@@ -18,30 +14,26 @@ def process_download(video_url: str, output_path: str, download_type: str = "aut
     print("🧩 Jenis Unduhan:", download_type)
     print("────────────────────────────")
 
-    # Deteksi jenis jika "auto"
     tool = download_type
     if tool == "auto":
         if is_drive(video_url):
             tool = "google_drive"
         elif is_m3u8(video_url):
-            tool = "m3u8"
+            tool = "ytdlp"
         else:
-            tool = "direct"
+            tool = "ytdlp"
 
     print(f"🚀 Menggunakan alat: {tool}")
     start_time = time.time()
 
     try:
         if tool == "google_drive":
-            download_from_google_drive(video_url, output_path)
-        elif tool == "m3u8":
-            download_from_m3u8(video_url, output_path)
-        elif tool == "direct":
-            download_from_direct_link(video_url, output_path)
+            download_from_google_drive(video_url, os.path.basename(output_path))
+        elif tool == "ytdlp":
+            download_with_ytdlp(url=video_url, output_template=output_path)
         else:
             raise ValueError("❌ Jenis download tidak dikenali!")
 
-        # ✅ Cek hasil
         if os.path.exists(output_path):
             size = os.path.getsize(output_path) / (1024 * 1024)
             elapsed = time.time() - start_time
