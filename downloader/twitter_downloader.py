@@ -1,9 +1,10 @@
+# downloader/twitter_downloader.py
+
 import os
 import re
 import json
 import glob
 import datetime
-from tqdm import tqdm
 
 from core.setup_directories import prepare_directories
 from downloader.ytdlp import download_with_ytdlp
@@ -14,11 +15,13 @@ VIDEO_DIR = dirs["video"]
 META_DIR = dirs["meta"]
 COOKIES_PATH = os.path.join(dirs["cookies"], "cookies.txt")
 
+
 def extract_tweet_id(url: str) -> str:
     match = re.search(r"/status/(\d+)", url)
     if not match:
         raise ValueError("❌ URL tidak valid: Tidak ditemukan Tweet ID.")
     return match.group(1)
+
 
 def simulate_metadata(url: str, use_cookies: bool = False) -> dict:
     try:
@@ -46,6 +49,7 @@ def simulate_metadata(url: str, use_cookies: bool = False) -> dict:
             print("🔐 Tweet ini kemungkinan membutuhkan cookies.txt (login).")
         return None
 
+
 def save_metadata_json(info: dict, tweet_id: str):
     if info is None:
         print("⚠️ Metadata tidak tersedia, tidak disimpan.")
@@ -56,19 +60,20 @@ def save_metadata_json(info: dict, tweet_id: str):
         json.dump(info, f, ensure_ascii=False, indent=2)
     print(f"📄 Metadata disimpan ke: {path}")
 
+
 def download_tweet_video(url: str, use_cookies: bool = False) -> list:
     output_template = os.path.join(VIDEO_DIR, "%(id)s_video.%(ext)s")
-    print("📥 Mulai mengunduh video Twitter...\n")
+    print("📥 Mulai mengunduh video Twitter...")
 
-    # Gunakan ytdlp.py
     download_with_ytdlp(
         url=url,
         output_template=output_template,
-        use_cookies=use_cookies
+        use_cookies=use_cookies,
+        extra_args=["--no-warnings"]
     )
 
-    print("✅ Download selesai.")
     return glob.glob(os.path.join(VIDEO_DIR, "*_video.*"))
+
 
 def summarize_download(files: list, tweet_id: str, tweet_url: str, metadata: dict = None):
     total_size_mb = sum(os.path.getsize(f) for f in files) / (1024 * 1024)
