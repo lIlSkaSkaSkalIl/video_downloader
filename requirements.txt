@@ -1,3 +1,6 @@
 pyrofork
 tgcrypto
 tqdm
+yt-dlp
+gdown
+m3u8downloader
