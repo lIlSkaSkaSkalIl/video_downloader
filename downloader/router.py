@@ -1,9 +1,14 @@
+# downloader/router.py
+
 import time
 import os
 
-from downloader.google_drive import download_from_google_drive, extract_drive_id
+from downloader.google_drive import download_from_google_drive
 from downloader.m3u8 import download_from_m3u8
-from downloader.ytdlp import download_from_direct_link
+from downloader.ytdlp import download_with_ytdlp
+from core.setup_directories import prepare_directories
+
+dirs = prepare_directories()
 
 def is_m3u8(url: str) -> bool:
     return url.endswith(".m3u8") or ".m3u8?" in url
@@ -11,10 +16,9 @@ def is_m3u8(url: str) -> bool:
 def is_drive(url: str) -> bool:
     return "drive.google.com" in url
 
-def process_download(video_url: str, output_path: str, download_type: str = "auto"):
+def process_download(video_url: str, output_path: str = None, download_type: str = "auto"):
     print("🎯 Link:", video_url)
     print("🧩 Jenis Unduhan:", download_type)
-    print("📁 Output:", output_path)
     print("────────────────────────────")
 
     # Deteksi jenis jika auto
@@ -32,19 +36,21 @@ def process_download(video_url: str, output_path: str, download_type: str = "aut
 
     try:
         if tool == "google_drive":
-            download_from_google_drive(video_url, output_path)
+            output = download_from_google_drive(video_url)
         elif tool == "m3u8":
-            download_from_m3u8(video_url, output_path)
+            output = download_from_m3u8(video_url)
         elif tool == "direct":
-            download_from_direct_link(video_url, output_path)
+            if not output_path:
+                output_path = os.path.join(dirs["video"], "direct_video.mp4")
+            download_with_ytdlp(video_url, output_path)
+            output = output_path
         else:
             raise ValueError("❌ Jenis download tidak dikenali!")
 
-        # ✅ Cek hasil
-        if os.path.exists(output_path):
-            size = os.path.getsize(output_path) / (1024 * 1024)
+        if os.path.exists(output):
+            size = os.path.getsize(output) / (1024 * 1024)
             elapsed = time.time() - start_time
-            print(f"\n\n✅ Selesai! File disimpan di: {output_path}")
+            print(f"\n✅ Selesai! File: {output}")
             print(f"📦 Ukuran file: {size:.2f} MB")
             print(f"⏱️ Waktu download: {elapsed:.2f} detik")
         else:
