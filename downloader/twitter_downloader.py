@@ -1,15 +1,12 @@
-# downloader/twitter_downloader.py
-
 import os
 import re
 import json
 import glob
-import subprocess
 import datetime
 from tqdm import tqdm
 
 from core.setup_directories import prepare_directories
-from pathlib import Path
+from downloader.ytdlp import download_with_ytdlp
 
 # Siapkan direktori
 dirs = prepare_directories()
@@ -60,35 +57,15 @@ def save_metadata_json(info: dict, tweet_id: str):
     print(f"📄 Metadata disimpan ke: {path}")
 
 def download_tweet_video(url: str, use_cookies: bool = False) -> list:
-    command = ["yt-dlp"]
-    if use_cookies and os.path.exists(COOKIES_PATH):
-        command += ["--cookies", COOKIES_PATH]
+    output_template = os.path.join(VIDEO_DIR, "%(id)s_video.%(ext)s")
+    print("📥 Mulai mengunduh video Twitter...\n")
 
-    command += [
-        "-f", "best",
-        "-o", f"{VIDEO_DIR}/%(id)s_video.%(ext)s",
-        url
-    ]
-
-    print("📥 Mulai mengunduh video...\n")
-    progress_bar = tqdm(total=100, desc="📥 Download", unit="%")
-
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-
-    for line in process.stdout:
-        line = line.strip()
-        if "%" in line:
-            match = re.search(r'(\d{1,3}\.\d)%', line)
-            if match:
-                percent = float(match.group(1))
-                progress_bar.n = int(percent)
-                progress_bar.refresh()
-        elif "[download]" in line or "Destination" in line:
-            print(line)
-    process.wait()
-    progress_bar.n = 100
-    progress_bar.refresh()
-    progress_bar.close()
+    # Gunakan ytdlp.py
+    download_with_ytdlp(
+        url=url,
+        output_template=output_template,
+        use_cookies=use_cookies
+    )
 
     print("✅ Download selesai.")
     return glob.glob(os.path.join(VIDEO_DIR, "*_video.*"))
