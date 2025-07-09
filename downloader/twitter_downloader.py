@@ -9,7 +9,6 @@ import datetime
 from tqdm import tqdm
 
 from core.setup_directories import prepare_directories
-from downloader.ytdlp import download_from_direct_link  # opsional jika ingin konsolidasi
 from pathlib import Path
 
 # Siapkan direktori
