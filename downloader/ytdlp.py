@@ -1,14 +1,19 @@
-import subprocess
+# downloader/ytdlp.py
 
-def download_from_direct_link(url: str, output_path: str):
-    cmd = [
-        "yt-dlp",
-        "-f", "best",
-        "-o", output_path,
-        "--no-warnings",
-        "--retries", "3",
-        url
-    ]
+import subprocess
+import os
+from typing import List
+
+def download_with_ytdlp(
+    url: str,
+    output_template: str,
+    use_cookies: bool = False,
+    extra_args: List[str] = []
+):
+    cmd = ["yt-dlp", "-f", "best", "-o", output_template] + extra_args
+    if use_cookies and os.path.exists("cookies.txt"):
+        cmd += ["--cookies", "cookies.txt"]
+
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
     for line in process.stdout:
         print(f"\r{line.strip()[:150]}", end="", flush=True)
