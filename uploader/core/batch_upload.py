@@ -9,11 +9,11 @@ from pyrogram.enums import ParseMode
 from uploader.core.upload import send_video
 from uploader.utils.utils import write_log_txt, write_log_json
 from uploader.utils.messages import (
-    build_preparation_msg,
-    build_upload_start_msg,
-    build_upload_success_msg,
-    build_upload_error_msg,
-    build_batch_complete_msg
+    build_preparation_message,
+    build_upload_start_status,
+    build_upload_success_status,
+    build_upload_error_status,
+    build_batch_complete_message
 )
 from uploader.utils.labels import LABELS, SEPARATOR
 
