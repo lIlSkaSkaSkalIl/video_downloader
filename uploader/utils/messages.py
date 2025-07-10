@@ -1,3 +1,4 @@
+import os
 from .labels import LABELS, SEP
 
 def build_persiapan_msg(total: int) -> str:
@@ -59,3 +60,15 @@ def build_batch_selesai_msg(total, total_size_mb, minutes, seconds):
 
 🎉 {LABELS['sukses_upload']}
 """
+
+def tampilkan_ringkasan_metadata(metadata: dict):
+    print(f"""
+✅ Metadata: {metadata['filename']}
+╭🖼️ Thumbnail : {os.path.basename(metadata['thumbnail_path'])}
+├⏱️ Durasi    : {metadata['duration_str']}
+├📐 Resolusi  : {metadata['resolution']}
+├🎥 Video     : {metadata['video_codec']}
+├🎧 Audio     : {metadata['audio_codec']}
+├💾 Ukuran    : {metadata['size_mb']} MB
+╰📀 Format    : {metadata['format'].upper()}
+""")
