@@ -4,7 +4,7 @@ from glob import glob
 from datetime import datetime
 
 from uploader.utils.utils import write_log_txt, write_log_json
-from uploader.utils.messages import display_metadata_summary
+from uploader.utils.messages import print_metadata_summary  # ✅ Ganti nama fungsi
 from uploader.tools.metadata.extractor import extract_video_info
 from uploader.tools.metadata.thumbnail import generate_thumbnail
 
@@ -42,7 +42,7 @@ def process_all_videos(video_dir, metadata_dir, thumbnail_dir, log_txt_path, log
             write_log_txt(log_txt_path, summary_line)
             write_log_json(log_json_path, metadata)
 
-            display_metadata_summary(metadata)
+            print_metadata_summary(metadata)  # ✅ Gunakan nama fungsi baru
             processed_count += 1
 
         except Exception as e:
