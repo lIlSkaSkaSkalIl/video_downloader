@@ -6,72 +6,93 @@ import asyncio
 from pyrogram import Client
 from pyrogram.enums import ParseMode
 
-from uploader.core.upload import kirim_video
-from uploader.utils.utils import tulis_log_txt, tulis_log_json
+from uploader.core.upload import send_video
+from uploader.utils.utils import write_log_txt, write_log_json
 from uploader.utils.messages import (
-    build_persiapan_msg,
-    build_status_awal,
-    build_status_sukses,
-    build_status_error,
-    build_batch_selesai_msg
+    build_preparation_msg,
+    build_upload_start_msg,
+    build_upload_success_msg,
+    build_upload_error_msg,
+    build_batch_complete_msg
 )
-from uploader.utils.labels import LABELS, SEP
+from uploader.utils.labels import LABELS, SEPARATOR
 
 
-# 🔁 Fungsi utama untuk batch upload semua video
-async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID, API_HASH, BOT_TOKEN):
+async def batch_upload(
+    metadata_dir,
+    log_txt_path,
+    log_json_path,
+    chat_id,
+    channel_id,
+    api_id,
+    api_hash,
+    bot_token
+):
     async with Client(
         "upload_bot",
-        api_id=API_ID,
-        api_hash=API_HASH,
-        bot_token=BOT_TOKEN,
+        api_id=api_id,
+        api_hash=api_hash,
+        bot_token=bot_token,
         workers=32,
         in_memory=True
     ) as app:
-        meta_files = sorted(glob.glob(os.path.join(meta_dir, "*_meta.json")))
-        total = len(meta_files)
+        metadata_files = sorted(glob.glob(os.path.join(metadata_dir, "*_meta.json")))
+        total_files = len(metadata_files)
 
-        if total == 0:
-            msg = f"⚠️ {LABELS['tidak_ada_file']}"
-            print(msg)
-            await app.send_message(chat_id=CHAT_ID, text=msg, parse_mode=ParseMode.MARKDOWN)
+        if total_files == 0:
+            warning_msg = f"⚠️ {LABELS['no_file_found']}"
+            print(warning_msg)
+            await app.send_message(chat_id=chat_id, text=warning_msg, parse_mode=ParseMode.MARKDOWN)
             return
 
-        persiapan_msg = build_persiapan_msg(total)
-        print(persiapan_msg)
-        await app.send_message(chat_id=CHAT_ID, text=persiapan_msg, parse_mode=ParseMode.MARKDOWN)
+        preparation_msg = build_preparation_msg(total_files)
+        print(preparation_msg)
+        await app.send_message(chat_id=chat_id, text=preparation_msg, parse_mode=ParseMode.MARKDOWN)
 
         await asyncio.sleep(20)
 
-        # 🚀 Mulai proses upload
+        # 🚀 Start upload
         start_time = time.time()
-        total_size_bytes = sum(
-            os.path.getsize(json.load(open(f))["video_path"])
-            for f in meta_files if os.path.exists(f)
-        )
+        start_timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+        total_size_bytes = 0
 
-        for idx, meta_path in enumerate(meta_files, start=1):
-            await kirim_video(
-                app, meta_path, idx, total,
-                CHAT_ID, CHANNEL_ID,
-                log_txt, log_json
+        for meta_path in metadata_files:
+            try:
+                with open(meta_path, "r", encoding="utf-8") as f:
+                    metadata = json.load(f)
+                    video_path = metadata.get("video_path", "")
+                    if os.path.exists(video_path):
+                        total_size_bytes += os.path.getsize(video_path)
+            except Exception as e:
+                print(f"⚠️ Failed to read metadata: {meta_path} | {e}")
+
+        for index, meta_path in enumerate(metadata_files, start=1):
+            await send_video(
+                app, meta_path, index, total_files,
+                chat_id, channel_id,
+                log_txt_path, log_json_path
             )
             await asyncio.sleep(2)
 
-        # ✅ Selesai
-        elapsed = time.time() - start_time
-        minutes, seconds = divmod(int(elapsed), 60)
+        # ✅ Done
+        elapsed_time = time.time() - start_time
+        minutes, seconds = divmod(int(elapsed_time), 60)
         total_size_mb = total_size_bytes / (1024 * 1024)
 
-        selesai_msg = build_batch_selesai_msg(total, total_size_mb, minutes, seconds)
-        print(selesai_msg)
-        await app.send_message(chat_id=CHAT_ID, text=selesai_msg, parse_mode=ParseMode.MARKDOWN)
+        complete_msg = build_batch_complete_msg(total_files, total_size_mb, minutes, seconds)
+        print(complete_msg)
+        await app.send_message(chat_id=chat_id, text=complete_msg, parse_mode=ParseMode.MARKDOWN)
 
-        tulis_log_txt(log_txt, f"[📦] Batch selesai: {total} file, {total_size_mb:.2f} MB, {minutes}m {seconds}s")
-        tulis_log_json(log_json, {
+        write_log_txt(
+            log_txt_path,
+            f"[📦] Batch complete: {total_files} files, {total_size_mb:.2f} MB, {minutes}m {seconds}s"
+        )
+
+        write_log_json(log_json_path, {
             "status": "batch_done",
-            "total_files": total,
+            "total_files": total_files,
             "total_size_mb": round(total_size_mb, 2),
-            "elapsed_sec": int(elapsed),
-            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
+            "elapsed_sec": int(elapsed_time),
+            "start_time": start_timestamp,
+            "end_time": time.strftime("%Y-%m-%d %H:%M:%S")
         })
