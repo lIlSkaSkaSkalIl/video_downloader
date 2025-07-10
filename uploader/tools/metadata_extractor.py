@@ -3,8 +3,10 @@ import json
 import subprocess
 from glob import glob
 from datetime import datetime
+
 from uploader.core.setup_directories import prepare_directories
 from uploader.utils.utils import tulis_log_txt, tulis_log_json
+
 
 def extract_video_info(path, thumbnail_path):
     result = subprocess.run(
@@ -54,6 +56,7 @@ def extract_video_info(path, thumbnail_path):
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     }
 
+
 def cetak_ringkasan_metadata(metadata: dict):
     def get(val, default="N/A"):
         return val if val not in [None, "", 0] else default
@@ -77,6 +80,7 @@ def cetak_ringkasan_metadata(metadata: dict):
 ├🎚️ Sampel    : {get(metadata.get('audio_sample_rate'))} Hz
 ╰🕓 Timestamp : {get(metadata['timestamp'])}
 """)
+
 
 def proses_semua_video(video_dir: str, base_dir: str):
     dirs = prepare_directories(base_dir)
@@ -116,7 +120,10 @@ def proses_semua_video(video_dir: str, base_dir: str):
             with open(json_path, "w", encoding="utf-8") as f:
                 json.dump(metadata, f, indent=2)
 
-            tulis_log_txt(log_txt_path, f"[✅] {metadata['filename']} | {metadata['resolution']} | {metadata['video_codec']}/{metadata['audio_codec']} | {metadata['size_mb']}MB | {metadata['duration_str']}")
+            tulis_log_txt(
+                log_txt_path,
+                f"[✅] {metadata['filename']} | {metadata['resolution']} | {metadata['video_codec']}/{metadata['audio_codec']} | {metadata['size_mb']}MB | {metadata['duration_str']}"
+            )
             tulis_log_json(log_json_path, metadata)
 
             cetak_ringkasan_metadata(metadata)
