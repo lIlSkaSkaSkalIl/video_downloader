@@ -61,19 +61,19 @@ def build_batch_selesai_msg(total, total_size_mb, minutes, seconds):
 🎉 {LABELS['sukses_upload']}
 """
 
-def tampilkan_ringkasan_metadata(metadata: dict):
+def print_metadata_summary(metadata: dict):
     def get(val, default="N/A"):
         return val if val not in [None, "", 0] else default
 
     print(f"""
 ✅ Metadata: {get(metadata['filename'])}
 ╭🖼️ Thumbnail     : {os.path.basename(get(metadata['thumbnail_path']))}
-├⏱️ Durasi        : {get(metadata['duration_str'])}
-├📐 Resolusi      : {get(metadata['resolution'])}
-├↔️ Lebar         : {get(metadata['width'])} px
-├↕️ Tinggi        : {get(metadata['height'])} px
+├⏱️ Duration      : {get(metadata['duration_str'])}
+├📐 Resolution    : {get(metadata['resolution'])}
+├↔️ Width         : {get(metadata['width'])} px
+├↕️ Height        : {get(metadata['height'])} px
 ├📀 Format        : {get(metadata['format'], 'unknown').upper()}
-├💾 Ukuran        : {get(metadata['size_mb'])} MB
+├💾 Size          : {get(metadata['size_mb'])} MB
 ├📊 Bitrate Total : {get(metadata.get('bit_rate'))} bps
 ├🎥 Video Codec   : {get(metadata['video_codec'])}
 ├🌈 PixFmt        : {get(metadata['video_pix_fmt'])}
@@ -81,8 +81,11 @@ def tampilkan_ringkasan_metadata(metadata: dict):
 ├🎞️ FPS           : {get(metadata['video_fps'])}
 ├🎞️ Video Bitrate : {get(metadata.get('video_bitrate'))} bps
 ├🎧 Audio Codec   : {get(metadata['audio_codec'])}
-├🔊 Channel       : {get(metadata.get('audio_channels'))}
+├🔊 Channels      : {get(metadata.get('audio_channels'))}
 ├🎚️ Sample Rate   : {get(metadata.get('audio_sample_rate'))} Hz
 ├🎧 Audio Bitrate : {get(metadata.get('audio_bitrate'))} bps
 ╰🕓 Timestamp     : {get(metadata['timestamp'])}
 """)
+
+# Alias lama (opsional untuk backward compatibility)
+tampilkan_ringkasan_metadata = print_metadata_summary
