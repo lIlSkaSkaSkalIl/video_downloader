@@ -5,77 +5,74 @@ import traceback
 from tqdm import tqdm
 from pyrogram.enums import ParseMode
 
-# ✅ Impor dari utils dan messages
-from uploader.utils.utils import escape_md, tulis_log_txt, tulis_log_json
+from uploader.utils.utils import escape_md, write_log_txt, write_log_json
 from uploader.utils.messages import (
-    build_status_awal,
-    build_status_sukses,
-    build_status_error
+    build_upload_start_msg,
+    build_upload_success_msg,
+    build_upload_error_msg
 )
 
-# 📊 Fungsi progress bar
-def progress(current, total):
-    global bar
-    bar.update(current - bar.n)
+def create_progress_callback(total_size):
+    bar = tqdm(
+        total=total_size,
+        unit='B',
+        unit_scale=True,
+        desc="📤 Uploading",
+        dynamic_ncols=True
+    )
+    def progress(current, total):
+        bar.update(current - bar.n)
+    return progress, bar
 
-# 📤 Fungsi upload satu video
-async def kirim_video(app, meta_path, current_index, total_count, CHAT_ID, CHANNEL_ID, log_txt, log_json):
+
+async def send_video(app, meta_path, index, total_count, chat_id, channel_id, log_txt_path, log_json_path):
     try:
-        start_upload = time.time()
+        start_time = time.time()
 
-        with open(meta_path, "r") as f:
+        with open(meta_path, "r", encoding="utf-8") as f:
             meta = json.load(f)
 
         video_path = meta["video_path"]
         thumbnail_path = meta["thumbnail_path"]
         filename = escape_md(meta["filename"])
         duration = meta["duration"]
-        filesize = os.path.getsize(video_path)
-        filesize_mb = filesize / (1024 * 1024)
+        file_size = os.path.getsize(video_path)
+        file_size_mb = file_size / (1024 * 1024)
 
-        # Kirim status awal
         await app.send_message(
-            chat_id=CHAT_ID,
-            text=build_status_awal(filename, filesize_mb, duration, current_index, total_count),
+            chat_id=chat_id,
+            text=build_upload_start_msg(filename, file_size_mb, duration, index, total_count),
             parse_mode=ParseMode.MARKDOWN
         )
 
-        global bar
-        bar = tqdm(
-            total=filesize,
-            unit='B',
-            unit_scale=True,
-            desc=f"📤 Upload {current_index}/{total_count}",
-            dynamic_ncols=True
-        )
+        progress_callback, bar = create_progress_callback(file_size)
 
-        # Upload video
         await app.send_video(
-            chat_id=CHANNEL_ID,
+            chat_id=channel_id,
             video=video_path,
             thumb=thumbnail_path,
             caption=filename,
             duration=duration,
             supports_streaming=True,
-            progress=progress
+            progress=progress_callback
         )
         bar.close()
 
-        waktu_upload = round(time.time() - start_upload, 2)
+        upload_time = round(time.time() - start_time, 2)
 
-        # Kirim status sukses
         await app.send_message(
-            chat_id=CHAT_ID,
-            text=build_status_sukses(filename, current_index, total_count, waktu_upload, meta),
+            chat_id=chat_id,
+            text=build_upload_success_msg(filename, index, total_count, upload_time, meta),
             parse_mode=ParseMode.MARKDOWN
         )
 
-        # Tulis log
-        tulis_log_txt(
-            log_txt,
-            f"[✅] {meta['filename']} | {meta.get('resolution')} | {meta.get('video_codec')}/{meta.get('audio_codec')} | {meta.get('size_mb')}MB | {meta.get('duration')}s | {waktu_upload}s"
+        write_log_txt(
+            log_txt_path,
+            f"[✅] {meta['filename']} | {meta.get('resolution')} | "
+            f"{meta.get('video_codec')}/{meta.get('audio_codec')} | "
+            f"{meta.get('size_mb')}MB | {meta.get('duration')}s | {upload_time}s"
         )
-        tulis_log_json(log_json, {
+        write_log_json(log_json_path, {
             "status": "success",
             "filename": meta["filename"],
             "resolution": meta.get("resolution"),
@@ -86,32 +83,29 @@ async def kirim_video(app, meta_path, current_index, total_count, CHAT_ID, CHANN
             "bit_rate": meta.get("bit_rate"),
             "video_bitrate": meta.get("video_bitrate"),
             "audio_bitrate": meta.get("audio_bitrate"),
-            "upload_time": waktu_upload,
+            "upload_time": upload_time,
             "timestamp": time.strftime("%Y-%m-%d %H:%M:%S")
         })
 
-        # Hapus file setelah upload
-        for f in [thumbnail_path, meta_path, video_path]:
-            if os.path.exists(f):
-                os.remove(f)
+        for path in [thumbnail_path, meta_path, video_path]:
+            if os.path.exists(path):
+                os.remove(path)
 
     except Exception as e:
         error_msg = str(e) or traceback.format_exc()
         err_filename = meta.get("filename", os.path.basename(meta_path))
 
-        # Kirim status error
         await app.send_message(
-            chat_id=CHAT_ID,
-            text=build_status_error(escape_md(err_filename), escape_md(error_msg), current_index, total_count),
+            chat_id=chat_id,
+            text=build_upload_error_msg(escape_md(err_filename), escape_md(error_msg), index, total_count),
             parse_mode=ParseMode.MARKDOWN
         )
 
-        # Tulis log error
-        tulis_log_txt(
-            log_txt,
-            f"[❌] {err_filename} | GAGAL - {error_msg.strip().splitlines()[0]}"
+        write_log_txt(
+            log_txt_path,
+            f"[❌] {err_filename} | FAILED - {error_msg.strip().splitlines()[0]}"
         )
-        tulis_log_json(log_json, {
+        write_log_json(log_json_path, {
             "status": "error",
             "filename": err_filename,
             "error": error_msg.strip().splitlines()[0],
