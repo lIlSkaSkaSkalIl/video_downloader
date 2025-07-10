@@ -22,17 +22,17 @@ async def batch_upload(
     metadata_dir,
     log_txt_path,
     log_json_path,
-    chat_id,
-    channel_id,
-    api_id,
-    api_hash,
-    bot_token
+    CHAT_ID,
+    CHANNEL_ID,
+    API_ID,
+    API_HASH,
+    BOT_TOKEN
 ):
     async with Client(
         "upload_bot",
-        api_id=api_id,
-        api_hash=api_hash,
-        bot_token=bot_token,
+        api_id=API_ID,
+        api_hash=API_HASH,
+        bot_token=BOT_TOKEN,
         workers=32,
         in_memory=True
     ) as app:
@@ -42,12 +42,12 @@ async def batch_upload(
         if total_files == 0:
             warning_msg = f"⚠️ {LABELS['no_file_found']}"
             print(warning_msg)
-            await app.send_message(chat_id=chat_id, text=warning_msg, parse_mode=ParseMode.MARKDOWN)
+            await app.send_message(chat_id=CHAT_ID, text=warning_msg, parse_mode=ParseMode.MARKDOWN)
             return
 
-        preparation_msg = build_preparation_msg(total_files)
+        preparation_msg = build_preparation_message(total_files)
         print(preparation_msg)
-        await app.send_message(chat_id=chat_id, text=preparation_msg, parse_mode=ParseMode.MARKDOWN)
+        await app.send_message(chat_id=CHAT_ID, text=preparation_msg, parse_mode=ParseMode.MARKDOWN)
 
         await asyncio.sleep(20)
 
@@ -69,7 +69,7 @@ async def batch_upload(
         for index, meta_path in enumerate(metadata_files, start=1):
             await send_video(
                 app, meta_path, index, total_files,
-                chat_id, channel_id,
+                CHAT_ID, CHANNEL_ID,
                 log_txt_path, log_json_path
             )
             await asyncio.sleep(2)
@@ -79,9 +79,9 @@ async def batch_upload(
         minutes, seconds = divmod(int(elapsed_time), 60)
         total_size_mb = total_size_bytes / (1024 * 1024)
 
-        complete_msg = build_batch_complete_msg(total_files, total_size_mb, minutes, seconds)
+        complete_msg = build_batch_complete_message(total_files, total_size_mb, minutes, seconds)
         print(complete_msg)
-        await app.send_message(chat_id=chat_id, text=complete_msg, parse_mode=ParseMode.MARKDOWN)
+        await app.send_message(chat_id=CHAT_ID, text=complete_msg, parse_mode=ParseMode.MARKDOWN)
 
         write_log_txt(
             log_txt_path,
