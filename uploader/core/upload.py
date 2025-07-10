@@ -7,9 +7,9 @@ from pyrogram.enums import ParseMode
 
 from uploader.utils.utils import escape_md, write_log_txt, write_log_json
 from uploader.utils.messages import (
-    build_upload_start_msg,
-    build_upload_success_msg,
-    build_upload_error_msg
+    build_upload_start_status,
+    build_upload_success_status,
+    build_upload_error_status
 )
 
 def create_progress_callback(total_size):
@@ -41,7 +41,7 @@ async def send_video(app, meta_path, index, total_count, chat_id, channel_id, lo
 
         await app.send_message(
             chat_id=chat_id,
-            text=build_upload_start_msg(filename, file_size_mb, duration, index, total_count),
+            text=build_upload_start_status(filename, file_size_mb, duration, index, total_count),
             parse_mode=ParseMode.MARKDOWN
         )
 
@@ -62,7 +62,7 @@ async def send_video(app, meta_path, index, total_count, chat_id, channel_id, lo
 
         await app.send_message(
             chat_id=chat_id,
-            text=build_upload_success_msg(filename, index, total_count, upload_time, meta),
+            text=build_upload_success_status(filename, index, total_count, upload_time, meta),
             parse_mode=ParseMode.MARKDOWN
         )
 
@@ -97,7 +97,7 @@ async def send_video(app, meta_path, index, total_count, chat_id, channel_id, lo
 
         await app.send_message(
             chat_id=chat_id,
-            text=build_upload_error_msg(escape_md(err_filename), escape_md(error_msg), index, total_count),
+            text=build_upload_error_status(escape_md(err_filename), escape_md(error_msg), index, total_count),
             parse_mode=ParseMode.MARKDOWN
         )
 
