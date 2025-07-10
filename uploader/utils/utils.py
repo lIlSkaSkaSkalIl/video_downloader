@@ -1,7 +1,8 @@
 import os
 import json
 import re
-from .labels import LABELS, SEP
+
+from uploader.utils.labels import LABELS, SEP
 
 # 🔠 Escape karakter Markdown agar tidak error saat parsing
 def escape_md(text):
