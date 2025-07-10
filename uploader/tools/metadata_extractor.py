@@ -5,6 +5,7 @@ from glob import glob
 from datetime import datetime
 
 from uploader.utils.utils import tulis_log_txt, tulis_log_json
+from uploader.utils.messages import tampilkan_ringkasan_metadata  # ✅ Import ringkasan
 
 # 🎞️ Ambil metadata dari satu video
 def extract_video_info(path, thumbnail_path):
@@ -96,16 +97,7 @@ def proses_semua_video(video_dir, meta_dir, thumb_dir, log_txt_path, log_json_pa
             tulis_log_json(log_json_path, metadata)
 
             # 📊 Ringkasan
-            print(f"""
-✅ Metadata: {metadata['filename']}
-╭🖼️ Thumbnail : {os.path.basename(thumbnail_path)}
-├⏱️ Durasi    : {metadata['duration_str']}
-├📐 Resolusi  : {metadata['resolution']}
-├🎥 Video     : {metadata['video_codec']}
-├🎧 Audio     : {metadata['audio_codec']}
-├💾 Ukuran    : {metadata['size_mb']} MB
-╰📀 Format    : {metadata['format'].upper()}
-""")
+            tampilkan_ringkasan_metadata(metadata)  # ✅ Dipindah ke messages.py
 
             processed += 1
 
