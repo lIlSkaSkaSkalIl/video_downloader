@@ -5,7 +5,8 @@ import traceback
 from tqdm import tqdm
 from pyrogram.enums import ParseMode  # ✅ ganti dari pyrofork ke pyrogram
 
-from .utils import (
+# Baru
+from uploader.utils.utils import (
     escape_md,
     tulis_log_txt,
     tulis_log_json,
