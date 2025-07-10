@@ -1,5 +1,3 @@
-# core/setup_directories.py
-
 import os
 
 def prepare_directories(base_dir="/content/media_toolkit"):
@@ -10,6 +8,7 @@ def prepare_directories(base_dir="/content/media_toolkit"):
         "meta": os.path.join(base_dir, "meta"),
         "thumb": os.path.join(base_dir, "thumb"),
         "cookies": os.path.join(base_dir, "cookies"),
+        "logs": os.path.join(base_dir, "logs"),  # ✅ Ditambahkan
     }
 
     for path in dirs.values():
