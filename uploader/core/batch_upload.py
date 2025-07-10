@@ -6,9 +6,10 @@ import asyncio
 from pyrogram import Client
 from pyrogram.enums import ParseMode
 
-from .upload import kirim_video
-from .utils import tulis_log_txt, tulis_log_json
-from .labels import LABELS, SEP
+# Baru
+from uploader.core.upload import kirim_video
+from uploader.utils.utils import tulis_log_txt, tulis_log_json
+from uploader.utils.labels import LABELS, SEP
 
 # 🔁 Fungsi utama untuk batch upload semua video
 async def batch_upload(meta_dir, log_txt, log_json, CHAT_ID, CHANNEL_ID, API_ID, API_HASH, BOT_TOKEN):
