@@ -1,4 +1,4 @@
-# ✅ Label teks untuk berbagai status dan informasi
+# ✅ Label text for various statuses and information
 LABELS = {
     "persiapan": "𝙋𝙚𝙧𝙨𝙞𝙖𝙥𝙖𝙣 𝙐𝙥𝙡𝙤𝙖𝙙 𝘽𝙖𝙩𝙘𝙝",
     "informasi": "𝙄𝙣𝙛𝙤𝙧𝙢𝙖𝙨𝙞",
@@ -27,4 +27,5 @@ LABELS = {
     "error": "𝙀𝙧𝙧𝙤𝙧"
 }
 
+# Separator for label formatting
 SEP = " »"
