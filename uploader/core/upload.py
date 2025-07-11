@@ -5,8 +5,8 @@ import traceback
 from tqdm import tqdm
 from pyrogram.enums import ParseMode
 
-from uploader.utils.utils import escape_md, write_log_txt, write_log_json
-from uploader.utils.messages import (
+from utils.utils import escape_md, write_log_txt, write_log_json
+from utils.messages import (
     build_upload_start_status,
     build_upload_success_status,
     build_upload_error_status
