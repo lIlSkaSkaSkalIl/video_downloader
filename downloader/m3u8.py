@@ -41,7 +41,8 @@ def download_m3u8_video(video_url: str, output_dir: str = "/content/download/vid
 
     print(f"\n📥 Mulai mengunduh:")
     print(f"╭🔗 Link       : {video_url}")
-    print(f"├🗃 Output     : {output_path}")
+    print(f"├🗃 Output     : {output_dir}")
+    print(f"├🧬 File Name  : {output_name}") 
     print("╰🛠️ Downloader : yt-dlp + aria2c (16 koneksi paralel)\n")
 
     start_time = time.time()
