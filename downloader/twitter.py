@@ -51,6 +51,8 @@ def download_tweet_video(tweet_url: str, video_dir: str = "/content/download/vid
     
     progress_bar = tqdm(total=100, desc="📥 Download", unit="%")
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
+    
+    start_time = time.time()
 
     for line in process.stdout:
         line = line.strip()
@@ -64,9 +66,10 @@ def download_tweet_video(tweet_url: str, video_dir: str = "/content/download/vid
             print(line)
 
     process.wait()
+    duration_seconds = time.time() - start_time
     progress_bar.n = 100
     progress_bar.refresh()
     progress_bar.close()
     print("✅ Download selesai.")
 
-    return tweet_id, use_cookies, video_dir
+    return tweet_id, use_cookies, video_dir, duration_seconds
