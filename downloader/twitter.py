@@ -1,4 +1,4 @@
-# downloader/twitter_downloader.py
+# downloader/twitter.py
 
 import os
 import re
@@ -12,7 +12,7 @@ from yt_dlp import YoutubeDL
 def extract_tweet_id(tweet_url: str) -> str:
     match = re.search(r"/status/(\d+)", tweet_url)
     if not match:
-        raise ValueError("❌ URL tidak valid: Tidak ditemukan Tweet ID.")
+        raise ValueError("❌ Invalid URL: Tweet ID not found.")
     return match.group(1)
 
 def simulate_metadata(tweet_url: str) -> dict | None:
@@ -22,14 +22,14 @@ def simulate_metadata(tweet_url: str) -> dict | None:
         "extract_flat": True,
         "dump_single_json": True,
     }
-    print(f"🔍 Mendeteksi metadata tweet... ({tweet_url})")
+    print(f"🔍 Detecting tweet metadata... ({tweet_url})")
     try:
         with YoutubeDL(ydl_opts) as ydl:
             return ydl.extract_info(tweet_url, download=False)
     except Exception as e:
-        print(f"❌ Gagal mendeteksi metadata: {e}")
+        print(f"❌ Failed to detect metadata: {e}")
         if "authentication" in str(e).lower():
-            print("🔐 Tweet ini kemungkinan membutuhkan cookies.txt (login).")
+            print("🔐 This tweet may require cookies.txt (login).")
         return None
 
 def download_tweet_video(tweet_url: str, video_dir: str = "/content/download/video", cookies_path: str = "cookies.txt"):
@@ -37,7 +37,7 @@ def download_tweet_video(tweet_url: str, video_dir: str = "/content/download/vid
     tweet_id = extract_tweet_id(tweet_url)
     use_cookies = os.path.exists(cookies_path)
 
-    # Siapkan perintah yt-dlp
+    # Prepare yt-dlp command
     command = ["yt-dlp"]
     if use_cookies:
         command += ["--cookies", cookies_path]
@@ -47,8 +47,8 @@ def download_tweet_video(tweet_url: str, video_dir: str = "/content/download/vid
         tweet_url
     ]
 
-    print("🔐 Menggunakan cookies.txt" if use_cookies else "🔓 Tidak menggunakan cookies")
-    print("📥 Mulai mengunduh video...\n")
+    print("🔐 Using cookies.txt" if use_cookies else "🔓 Not using cookies")
+    print("📥 Starting download...\n")
     
     progress_bar = tqdm(total=100, desc="📥 Download", unit="%")
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
@@ -71,6 +71,6 @@ def download_tweet_video(tweet_url: str, video_dir: str = "/content/download/vid
     progress_bar.n = 100
     progress_bar.refresh()
     progress_bar.close()
-    print("✅ Download selesai.")
+    print("✅ Download completed.")
 
     return tweet_id, use_cookies, video_dir, duration_seconds
