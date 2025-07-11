@@ -73,6 +73,7 @@ def print_metadata_summary(metadata: dict):
 
     print(f"""
 ✅ Metadata: {get(metadata['filename'])}
+
 ╭🖼️ Thumbnail     : {os.path.basename(get(metadata['thumbnail_path']))}
 ├⏱️ Duration      : {get(metadata['duration_str'])}
 ├📐 Resolution    : {get(metadata['resolution'])}
@@ -100,20 +101,39 @@ def build_twitter_summary(tweet_url, tweet_id, use_cookies, downloaded_files, vi
 
     summary = f"""
 📊 Download Summary:
-╭📌 Tweet URL       {SEP} {tweet_url}
-├🆔 Tweet ID        {SEP} {tweet_id}
-├🔐 Cookies Used    {SEP} {'✅ Yes' if use_cookies else '❌ No'}
-├📁 Total Videos    {SEP} {len(downloaded_files)} file(s)
-├💾 Total Size      {SEP} {total_size_mb:.2f} MB
-├⏱️ Saved Time      {SEP} {duration_str}
-├🕒 Finished At     {SEP} {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-├📂 Output Folder   {SEP} {video_dir}
+
+╭📌 Tweet URL       : {tweet_url}
+├🆔 Tweet ID        : {tweet_id}
+├🔐 Cookies Used    : {'✅ Yes' if use_cookies else '❌ No'}
+├📁 Total Videos    : {len(downloaded_files)} file(s)
+├💾 Total Size      : {total_size_mb:.2f} MB
+├⏱️ Saved Time      : {duration_str}
+├🕒 Finished At     : {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+├📂 Output Folder   : {video_dir}
 ╰📜 File List       :
 """
     for i, fname in enumerate(file_names, 1):
         summary += f"   {i}. {fname}\n"
     return summary.strip()
 
+def build_m3u8_download_start(video_url, output_dir, output_name):
+    return f"""
+📥 Starting download:
 
+╭🔗 Link         : {video_url}
+├📂 Output Dir   : {output_dir}
+├📄 File Name    : {output_name}
+╰🛠️ Downloader   : yt-dlp + aria2c (16 parallel connections)
+"""
+
+def build_m3u8_summary(output_dir, output_name, size_mb, duration_sec):
+    return f"""
+✅ Download Complete!
+
+╭📂 Folder saved   : {output_dir}
+├📄 File name      : {output_name}
+├📦 File size      : {size_mb:.2f} MB
+╰⏱️ Download time  : {duration_sec:.2f} seconds
+"""
 # Backward compatibility alias
 tampilkan_ringkasan_metadata = print_metadata_summary
