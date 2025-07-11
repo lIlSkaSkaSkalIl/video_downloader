@@ -99,16 +99,16 @@ def build_twitter_summary(tweet_url, tweet_id, use_cookies, downloaded_files, vi
     duration_str = f"{int(duration_seconds // 60)} menit {int(duration_seconds % 60)} detik"
 
     summary = f"""
-📊 Ringkasan Status:
-╭📌 URL Tweet       {SEP} {tweet_url}
-├🆔 ID Tweet        {SEP} {tweet_id}
-├🔐 Cookies         {SEP} {'✅ Digunakan' if use_cookies else '❌ Tidak digunakan'}
-├📁 Total Video     {SEP} {len(downloaded_files)} file
-├💾 Ukuran Total    {SEP} {total_size_mb:.2f} MB
-├⏱️ Total Waktu     {SEP} {duration_str}
-├🕒 Selesai pada    {SEP} {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-├📂 Lokasi Video    {SEP} {video_dir}
-╰📜 Daftar File     :
+📊 Download Summary:
+╭📌 Tweet URL       {SEP} {tweet_url}
+├🆔 Tweet ID        {SEP} {tweet_id}
+├🔐 Cookies Used    {SEP} {'✅ Yes' if use_cookies else '❌ No'}
+├📁 Total Videos    {SEP} {len(downloaded_files)} file(s)
+├💾 Total Size      {SEP} {total_size_mb:.2f} MB
+├⏱️ Saved Time      {SEP} {duration_str}
+├🕒 Finished At     {SEP} {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+├📂 Output Folder   {SEP} {video_dir}
+╰📜 File List       :
 """
     for i, fname in enumerate(file_names, 1):
         summary += f"   {i}. {fname}\n"
