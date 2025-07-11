@@ -1,6 +1,6 @@
 # 📥 Video Downloader & Uploader Bot (Colab Edition)
 
-Automasi lengkap untuk mengunduh video dari berbagai sumber (Google Drive, M3U8, Direct Link, dan Twitter) dan mengunggahnya ke Telegram secara otomatis. Dirancang untuk berjalan di Google Colab dengan antarmuka interaktif.
+Automasi lengkap untuk mengunduh video dari berbagai sumber dan mengunggahnya ke Telegram. Dirancang untuk berjalan di Google Colab dengan antarmuka interaktif.
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/lIlSkaSkaSkalIl/video_downloader/blob/main/video_downloader.ipynb)
 
@@ -9,16 +9,11 @@ Automasi lengkap untuk mengunduh video dari berbagai sumber (Google Drive, M3U8,
 ## ✨ Fitur Utama
 
 - 🔗 **Download Video** dari:
-  - Google Drive
-  - Link langsung (`.mp4`)
   - M3U8 streaming
   - Twitter (single/multi video, mendukung cookies)
-
-- 🧠 **Auto-detect jenis unduhan** (Drive, m3u8, direct)
 - 🎞️ **Ambil Metadata + Thumbnail** dengan `ffprobe` & `ffmpeg`
-- 🧾 **Log file otomatis** (`log.txt`, `log.json`)
 - 📤 **Batch Upload ke Telegram** menggunakan Bot Token
-- 🔐 **Dukungan autentikasi Twitter** via `cookies.txt` (Kiwi Browser)
+- 🔐 **Dukungan autentikasi Twitter** via `cookies.txt`
 - 📦 **Hapus file otomatis setelah upload**
 
 ---
@@ -31,8 +26,8 @@ Automasi lengkap untuk mengunduh video dari berbagai sumber (Google Drive, M3U8,
 
 ### 2. Download Video
 - Pilih metode:
-  - `auto`: sistem akan mendeteksi jenis
-  - `google_drive`, `m3u8`, `direct`
+  - `twitter`
+  - `m3u8/Streaming`
 - Masukkan URL dan (opsional) nama file.
 
 ### 3. Ambil Metadata & Thumbnail
@@ -40,7 +35,6 @@ Automasi lengkap untuk mengunduh video dari berbagai sumber (Google Drive, M3U8,
 - Simpan hasil ke:
   - `meta/*.json`
   - `thumbnails/*.jpg`
-  - `logs/log.txt` dan `logs/log.json`
 
 ### 4. Upload ke Telegram
 - Siapkan kredensial:
@@ -74,7 +68,6 @@ Semua dependensi akan otomatis di-install dalam Colab:
 
 - `yt-dlp`
 - `gdown`
-- `m3u8downloader`
 - `ffmpeg`
 - `pyrogram`
 - `tgcrypto`
@@ -86,7 +79,7 @@ Semua dependensi akan otomatis di-install dalam Colab:
 
 Jika video Twitter tidak bisa diunduh karena dibatasi, kamu bisa:
 
-1. Gunakan **Kiwi Browser** + ekstensi **Get Cookies.txt**
+1. Gunakan ekstensi **Get Cookies.txt**
 2. Simpan sebagai `cookies.txt`
 3. Upload melalui cell yang tersedia
 
@@ -110,7 +103,7 @@ Dapatkan API ID & Hash dari [https://my.telegram.org](https://my.telegram.org)
 ## ✅ Contoh Output
 
 - Progres download dengan `tqdm`
-- Metadata `.json` dan thumbnail `.jpg`
+- Metadata dan thumbnail `.jpg`
 - Progres upload ke Telegram
 - Status upload per file (sukses/gagal)
 - Total ringkasan upload (jumlah file, durasi, ukuran)
