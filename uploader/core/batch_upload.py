@@ -15,7 +15,7 @@ from utils.messages import (
     build_upload_error_status,
     build_batch_complete_message
 )
-from uploader.utils.labels import LABELS, SEP
+from utils.labels import LABELS, SEP
 
 
 async def batch_upload(
