@@ -7,8 +7,8 @@ from pyrogram import Client
 from pyrogram.enums import ParseMode
 
 from uploader.core.upload import send_video
-from uploader.utils.utils import write_log_txt, write_log_json
-from uploader.utils.messages import (
+from utils.utils import write_log_txt, write_log_json
+from utils.messages import (
     build_preparation_message,
     build_upload_start_status,
     build_upload_success_status,
