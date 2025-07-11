@@ -1,4 +1,4 @@
-# downloader/m3u8_downloader.py
+# downloader/m3u8.py
 
 import os
 import subprocess
