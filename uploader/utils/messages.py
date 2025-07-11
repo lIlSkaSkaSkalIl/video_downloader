@@ -6,6 +6,7 @@ def build_preparation_message(total: int) -> str:
     return f"""📦 {LABELS['preparation']}
 
 {LABELS['info']} 
+
 ╭📁 {LABELS['total_files']}{SEP} {total} videos found
 ├⚠️ {LABELS['warning']}{SEP} Send a message to the channel
 │     first to allow bot access.
@@ -17,6 +18,7 @@ def build_upload_start_status(filename, filesize_mb, duration, current_index, to
     return f"""🚀 Uploading Video ({current_index}/{total_count})
 
 {LABELS['upload_details']} 
+
 ╭📁 {LABELS['name']}{SEP} {filename}
 ├📦 {LABELS['size']}{SEP} {filesize_mb:.2f} MB
 ├🕒 {LABELS['duration']}{SEP} {duration} seconds
@@ -28,6 +30,7 @@ def build_upload_success_status(filename, current_index, total_count, upload_tim
     return f"""✅ Upload Successful! ({current_index}/{total_count})
 
  {LABELS['upload_details']} 
+ 
 ╭🎬 {LABELS['file']}{SEP} {filename}
 ├📐 {LABELS['resolution']}{SEP} {meta.get("resolution", "?")}
 ├🎥 {LABELS['video']}{SEP} {meta.get("video_codec", "?")} ({meta.get("video_bitrate", "?")} bps)
@@ -55,6 +58,7 @@ def build_batch_complete_message(total, total_size_mb, minutes, seconds):
     return f"""✅ {LABELS['batch_done']}
 
 {LABELS['upload_details']} 
+
 ╭📁 {LABELS['total_files']}{SEP} {total} videos
 ├📦 {LABELS['total_size']}{SEP} {total_size_mb:.2f} MB
 ╰⏱️ {LABELS['total_time']}{SEP} {minutes} minutes {seconds} seconds
