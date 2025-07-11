@@ -82,6 +82,6 @@ def download_tweet_video(
     progress_bar.n = 100
     progress_bar.refresh()
     progress_bar.close()
-    print("✅ Download completed.")
+    print(f"\n✅ Download completed.")
 
     return tweet_id, use_cookies, video_dir, duration_seconds
