@@ -1,6 +1,6 @@
 import os
+import datetime
 from .labels import LABELS, SEP
-
 
 def build_preparation_message(total: int) -> str:
     return f"""📦 {LABELS['preparation']}
@@ -92,6 +92,25 @@ def print_metadata_summary(metadata: dict):
 ├🎧 Audio Bitrate : {get(metadata.get('audio_bitrate'))} bps
 ╰🕓 Timestamp     : {get(metadata['timestamp'])}
 """)
+
+def build_twitter_summary(tweet_url, tweet_id, use_cookies, downloaded_files, video_dir):
+    total_size_mb = sum(os.path.getsize(f) for f in downloaded_files) / (1024 * 1024)
+    file_names = [os.path.basename(f) for f in downloaded_files]
+
+    summary = f"""
+📊 Ringkasan Status:
+╭📌 URL Tweet       {SEP} {tweet_url}
+├🆔 ID Tweet        {SEP} {tweet_id}
+├🔐 Cookies         {SEP} {'✅ Digunakan' if use_cookies else '❌ Tidak digunakan'}
+├📁 Total Video     {SEP} {len(downloaded_files)} file
+├💾 Ukuran Total    {SEP} {total_size_mb:.2f} MB
+├🕒 Selesai pada    {SEP} {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+├📂 Lokasi Video    {SEP} {video_dir}
+╰📜 Daftar File     :
+"""
+    for i, fname in enumerate(file_names, 1):
+        summary += f"   {i}. {fname}\n"
+    return summary.strip()
 
 
 # Backward compatibility alias
