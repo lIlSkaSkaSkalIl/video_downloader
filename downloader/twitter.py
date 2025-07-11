@@ -1,5 +1,3 @@
-# downloader/twitter.py
-
 import os
 import re
 import subprocess
@@ -8,12 +6,15 @@ import datetime
 import time
 from tqdm import tqdm
 from yt_dlp import YoutubeDL
+from utils.directories import prepare_directories
+
 
 def extract_tweet_id(tweet_url: str) -> str:
     match = re.search(r"/status/(\d+)", tweet_url)
     if not match:
         raise ValueError("❌ Invalid URL: Tweet ID not found.")
     return match.group(1)
+
 
 def simulate_metadata(tweet_url: str) -> dict | None:
     ydl_opts = {
@@ -32,12 +33,22 @@ def simulate_metadata(tweet_url: str) -> dict | None:
             print("🔐 This tweet may require cookies.txt (login).")
         return None
 
-def download_tweet_video(tweet_url: str, video_dir: str = "/content/download/video", cookies_path: str = "cookies.txt"):
+
+def download_tweet_video(
+    tweet_url: str,
+    base_dir: str = "/content/media_toolkit",
+    cookies_file: str = "cookies.txt"
+):
+    # 📁 Prepare directory structure
+    dirs = prepare_directories(base_dir)
+    video_dir = dirs["video"]
+    cookies_path = os.path.join(dirs["cookies"], cookies_file)
+
     os.makedirs(video_dir, exist_ok=True)
     tweet_id = extract_tweet_id(tweet_url)
     use_cookies = os.path.exists(cookies_path)
 
-    # Prepare yt-dlp command
+    # 🧠 Build yt-dlp command
     command = ["yt-dlp"]
     if use_cookies:
         command += ["--cookies", cookies_path]
@@ -49,10 +60,10 @@ def download_tweet_video(tweet_url: str, video_dir: str = "/content/download/vid
 
     print("🔐 Using cookies.txt" if use_cookies else "🔓 Not using cookies")
     print("📥 Starting download...\n")
-    
+
     progress_bar = tqdm(total=100, desc="📥 Download", unit="%")
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-    
+
     start_time = time.time()
 
     for line in process.stdout:
