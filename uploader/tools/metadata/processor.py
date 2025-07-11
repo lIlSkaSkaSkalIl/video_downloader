@@ -3,8 +3,8 @@ import json
 from glob import glob
 from datetime import datetime
 
-from uploader.utils.utils import write_log_txt, write_log_json
-from uploader.utils.messages import print_metadata_summary  # ✅ Ganti nama fungsi
+from utils.utils import write_log_txt, write_log_json
+from utils.messages import print_metadata_summary  # ✅ Ganti nama fungsi
 from uploader.tools.metadata.extractor import extract_video_info
 from uploader.tools.metadata.thumbnail import generate_thumbnail
 
