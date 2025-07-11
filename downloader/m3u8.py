@@ -40,8 +40,8 @@ def download_m3u8_video(video_url: str, output_dir: str = "/content/download/vid
     output_path = os.path.join(output_dir, output_name)
 
     print(f"\n📥 Mulai mengunduh:")
-    print(f"╭🔗 Link   : {video_url}")
-    print(f"├🗃 Output : {output_path}")
+    print(f"╭🔗 Link       : {video_url}")
+    print(f"├🗃 Output     : {output_path}")
     print("╰🛠️ Downloader : yt-dlp + aria2c (16 koneksi paralel)\n")
 
     start_time = time.time()
@@ -65,8 +65,9 @@ def download_m3u8_video(video_url: str, output_dir: str = "/content/download/vid
     if os.path.exists(output_path):
         size = os.path.getsize(output_path) / (1024 * 1024)
         duration = time.time() - start_time
-        print(f"\n✅ Selesai! \n╭🗃 File disimpan di: {output_path}")
-        print(f"├📦 Ukuran file: {size:.2f} MB")
-        print(f"╰⏱️ Durasi download: {duration:.2f} detik")
+        print(f"\n✅ Selesai!")
+        print(f"╭🗃 File disimpan di : {output_path}") 
+        print(f"├📦 Ukuran file      : {size:.2f} MB")
+        print(f"╰⏱️ Durasi download  : {duration:.2f} detik")
     else:
         print("\n❌ Download gagal atau file tidak ditemukan.")
