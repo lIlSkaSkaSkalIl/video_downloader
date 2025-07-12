@@ -130,10 +130,12 @@ def build_m3u8_summary(output_dir, output_name, size_mb, duration_sec):
     return f"""
 ✅ Download Complete!
 
-╭📂 Folder saved   : {output_dir}
+┌📂 Folder saved   : {output_dir}
 ├📄 File name      : {output_name}
 ├📦 File size      : {size_mb:.2f} MB
-╰⏱️ Download time  : {duration_sec:.2f} seconds
+└⏱️ Download time  : {duration_sec:.2f} seconds
 """
 # Backward compatibility alias
 tampilkan_ringkasan_metadata = print_metadata_summary
+# ┌ ┐ └ ┘ ─ │ ├ ┤ ┬ ┴ ┼  
+# ╔ ╗ ╚ ╝ ═ ║ ╠ ╣ ╦ ╩ ╬
