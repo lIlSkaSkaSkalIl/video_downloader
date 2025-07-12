@@ -120,10 +120,10 @@ def build_m3u8_download_start(video_url, output_dir, output_name):
     return f"""
 📥 Starting download:
 
-╭🔗 Link         : {video_url}
+┌🔗 Link         : {video_url}
 ├📂 Output Dir   : {output_dir}
 ├📄 File Name    : {output_name}
-╰🛠️ Downloader   : yt-dlp + aria2c (16 parallel connections)
+└🛠️ Downloader   : yt-dlp + aria2c (16 parallel connections)
 """
 
 def build_m3u8_summary(output_dir, output_name, size_mb, duration_sec):
