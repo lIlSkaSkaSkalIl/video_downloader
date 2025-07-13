@@ -1,4 +1,4 @@
-# video_downloader/downloader/router.py
+# downloader/router.py
 
 import re
 import shutil
@@ -10,7 +10,6 @@ from utils.messages import log, download_summary, show_tool_detection, show_down
 def prepare_download(video_url: str, download_type: str, file_name: str, video_dir: str) -> str:
     """
     Prepare the final output path and valid filename for video download.
-
     Returns the full output_path.
     """
     os.makedirs(video_dir, exist_ok=True)
@@ -53,11 +52,7 @@ def extract_drive_id(url: str) -> str | None:
 
 
 def download_video_by_type(download_type: str, video_url: str, output_path: str, video_dir: str):
-    """
-    Download video from given URL based on the detected or selected type.
-    """
-
-    # 🔍 Detect tool type
+    # 🔍 Deteksi alat
     tool = download_type
     if tool == "auto":
         if is_drive(video_url):
@@ -69,7 +64,7 @@ def download_video_by_type(download_type: str, video_url: str, output_path: str,
 
     show_tool_detection(tool)
 
-    # ===================== DOWNLOAD PROCESS =====================
+    # ===================== PROSES UNDUH =====================
 
     if tool == "google_drive":
         log("Downloading from Google Drive...", icon="📁")
@@ -102,7 +97,7 @@ def download_video_by_type(download_type: str, video_url: str, output_path: str,
         downloaded_files = [f for f in os.listdir(temp_path) if f.endswith((".mp4", ".mkv", ".webm"))]
         if not downloaded_files:
             raise FileNotFoundError("❌ No video file found in temp folder.")
-        
+
         temp_download_path = os.path.join(temp_path, downloaded_files[0])
         shutil.move(temp_download_path, output_path)
         log(f"File moved to: {output_path}", icon="✅")
