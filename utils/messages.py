@@ -139,11 +139,13 @@ def show_download_info(video_url, download_type, output_path):
     print(f"├─🧩 Jenis Unduhan  : {download_type}")
     print(f"└─📁 Lokasi Simpan  : {output_path}")
 
-def download_summary(path):
+def download_summary(path, duration_sec=None): 
     if os.path.exists(path):
         size = os.path.getsize(path) / (1024 * 1024)
         print(f"\n✅ Selesai! File disimpan di: {path}")
         print(f"📦 Ukuran file: {size:.2f} MB")
+        if duration_sec is not None:
+            print(f"⏱️ Waktu unduhan: {duration_sec:.2f} detik")
     else:
         log("Download selesai tapi file tidak ditemukan.", icon="⚠️")
 
