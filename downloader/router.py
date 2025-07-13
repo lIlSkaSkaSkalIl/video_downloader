@@ -91,7 +91,7 @@ def download_video_by_type(download_type: str, video_url: str, output_path: str,
 
         process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
         for line in process.stdout:
-            print(f"\r{line.strip()[:150]}", end="", flush=True)
+            print(f"{line.strip()[:150]}", end="", flush=True)
         process.wait()
 
         downloaded_files = [f for f in os.listdir(temp_path) if f.endswith((".mp4", ".mkv", ".webm"))]
