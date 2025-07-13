@@ -24,6 +24,6 @@ def prepare_directories(base_dir="/content/media_toolkit", verbose=False):
     for name, path in dirs.items():
         os.makedirs(path, exist_ok=True)
         if verbose:
-            print(f"📁 Directory prepared: {name} → {path}")
+            print(f"├─📁 {name} : {path}")
 
     return dirs
