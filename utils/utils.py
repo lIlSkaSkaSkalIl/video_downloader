@@ -2,6 +2,9 @@ import os
 import json
 import re
 
+def log(msg: str, icon: str = "📌"):
+    print(f"{icon} {msg}")
+
 # 🔠 Escape special characters for Markdown (Telegram)
 def escape_md(text: str) -> str:
     return re.sub(r'([*\[\]~`>#+=|{}!])', r'\\\1', text)
