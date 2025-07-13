@@ -5,7 +5,7 @@ from utils.utils import log
 
 def upload_cookies():
     # 📁 Siapkan direktori
-    dirs = prepare_directories(verbose=True)
+    dirs = prepare_directories()
     cookies_dir = dirs["cookies"]
     cookies_path = os.path.join(cookies_dir, "cookies.txt")
 
