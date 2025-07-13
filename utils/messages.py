@@ -1,6 +1,11 @@
 import os
 import datetime
 from .labels import LABELS, SEP
+from utils.utils import log
+
+# ══════════════════════════════════════════════
+# 📦 Status Persiapan Batch
+# ══════════════════════════════════════════════
 
 def build_preparation_message(total: int) -> str:
     return f"""📦 {LABELS['preparation']}
@@ -13,6 +18,9 @@ def build_preparation_message(total: int) -> str:
 ╰⏳ {LABELS['status']}{SEP} Waiting for 20 seconds...
 """
 
+# ══════════════════════════════════════════════
+# 🚀 Status Upload
+# ══════════════════════════════════════════════
 
 def build_upload_start_status(filename, filesize_mb, duration, current_index, total_count):
     return f"""🚀 Uploading Video ({current_index}/{total_count})
@@ -24,7 +32,6 @@ def build_upload_start_status(filename, filesize_mb, duration, current_index, to
 ├🕒 {LABELS['duration']}{SEP} {duration} seconds
 ╰⏳ {LABELS['status']}{SEP} Uploading...
 """
-
 
 def build_upload_success_status(filename, current_index, total_count, upload_time, meta):
     return f"""✅ Upload Successful! ({current_index}/{total_count})
@@ -43,7 +50,6 @@ def build_upload_success_status(filename, current_index, total_count, upload_tim
 ╰⏱️ {LABELS['time']}{SEP} {upload_time:.2f} seconds
 """
 
-
 def build_upload_error_status(filename, error_text, current_index, total_count):
     return f"""❌ Upload Failed! ({current_index}/{total_count})
 
@@ -52,7 +58,6 @@ def build_upload_error_status(filename, error_text, current_index, total_count):
 ├⚠️ {LABELS['error']}{SEP} {error_text}
 ╰─────────────────────────────╯
 """
-
 
 def build_batch_complete_message(total, total_size_mb, minutes, seconds):
     return f"""✅ {LABELS['batch_done']}
@@ -66,6 +71,9 @@ def build_batch_complete_message(total, total_size_mb, minutes, seconds):
 🎉 {LABELS['upload_success']}
 """
 
+# ══════════════════════════════════════════════
+# 📊 Ringkasan Metadata
+# ══════════════════════════════════════════════
 
 def print_metadata_summary(metadata: dict):
     def get(val, default="N/A"):
@@ -94,6 +102,12 @@ def print_metadata_summary(metadata: dict):
 ╰🕓 Timestamp     : {get(metadata['timestamp'])}
 """)
 
+tampilkan_ringkasan_metadata = print_metadata_summary  # alias kompatibel
+
+# ══════════════════════════════════════════════
+# 📥 Download Twitter Summary
+# ══════════════════════════════════════════════
+
 def build_twitter_summary(tweet_url, tweet_id, use_cookies, downloaded_files, video_dir, duration_seconds):
     total_size_mb = sum(os.path.getsize(f) for f in downloaded_files) / (1024 * 1024)
     file_names = [os.path.basename(f) for f in downloaded_files]
@@ -116,6 +130,26 @@ def build_twitter_summary(tweet_url, tweet_id, use_cookies, downloaded_files, vi
         summary += f"   {i}. {fname}\n"
     return summary.strip()
 
+# ══════════════════════════════════════════════
+# 📺 Download Non-Twitter (m3u8, GDrive, Direct)
+# ══════════════════════════════════════════════
+
+def show_download_info(video_url, download_type, output_path):
+    print(f"┌─🎯 Link           : {video_url}")
+    print(f"├─🧩 Jenis Unduhan  : {download_type}")
+    print(f"└─📁 Lokasi Simpan  : {output_path}")
+
+def download_summary(path):
+    if os.path.exists(path):
+        size = os.path.getsize(path) / (1024 * 1024)
+        print(f"\n✅ Selesai! File disimpan di: {path}")
+        print(f"📦 Ukuran file: {size:.2f} MB")
+    else:
+        log("Download selesai tapi file tidak ditemukan.", icon="⚠️")
+
+def show_tool_detection(tool):
+    log(f"Menggunakan alat unduhan: {tool}", icon="🚀")
+
 def build_m3u8_download_start(video_url, output_dir, output_name):
     return f"""
 📥 Starting download:
@@ -135,7 +169,3 @@ def build_m3u8_summary(output_dir, output_name, size_mb, duration_sec):
 ├📦 File size      : {size_mb:.2f} MB
 └⏱️ Download time  : {duration_sec:.2f} seconds
 """
-# Backward compatibility alias
-tampilkan_ringkasan_metadata = print_metadata_summary
-# ┌ ┐ └ ┘ ─ │ ├ ┤ ┬ ┴ ┼  
-# ╔ ╗ ╚ ╝ ═ ║ ╠ ╣ ╦ ╩ ╬
