@@ -4,6 +4,7 @@ import re
 import shutil
 import subprocess
 import os
+import time
 from datetime import datetime
 from utils.messages import log, download_summary, show_tool_detection, show_download_info
 
@@ -65,7 +66,7 @@ def download_video_by_type(download_type: str, video_url: str, output_path: str,
     show_tool_detection(tool)
 
     # ===================== PROSES UNDUH =====================
-
+    start_time = time.time()
     if tool == "google_drive":
         log("Downloading from Google Drive...", icon="📁")
         import gdown
@@ -119,6 +120,8 @@ def download_video_by_type(download_type: str, video_url: str, output_path: str,
 
     else:
         raise ValueError("❌ Unknown download type!")
-
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    
     # ✅ Ringkasan
-    download_summary(output_path)
+    download_summary(output_path, elapsed_time)
